@@ -18,8 +18,8 @@ TRANSCODE_NAMESPACE = 'original'
 # This is name of file service you want to use for holding transcoded version of files
 # It is very strongly recommended to use a separate one from your main one
 TRANSCODE_FILE_SERVICE = 'web-transcodes'
-# This is name of tag service you want to use for holding hash tags
-TRANSCODE_TAG_SERVICE = 'Imported Tags'
+# This is service_key (NOT NAME) of tag service you want to use for holding hash tags
+TRANSCODE_TAG_SERVICE = '6c6f63616c2074616773'
 # Setting this to true will always re-encode and overwrite all the given files
 # Should really only be used when changing settings of encoding, as it will allow for quick replace of all files
 OVERWRITE_EXISTING_FILES=False
@@ -230,8 +230,8 @@ def cleanup_procedure():
     check_for_original(search_response)
 
 def get_tags_from_response(response):
-    services = response.get("service_names_to_statuses_to_display_tags")
-    tags = services.get(TRANSCODE_TAG_SERVICE).get('0')
+    services = response.get("tags")
+    tags = services.get(TRANSCODE_TAG_SERVICE).get('display_tags').get('0')
     return tags
 
 def convert_file(file_path: str, hash: str):
@@ -321,7 +321,7 @@ def check_config():
         if file_service.name == TRANSCODE_FILE_SERVICE:
             file_service_correct = True
     for tag_service in services_info.tags_services:
-        if tag_service.name == TRANSCODE_TAG_SERVICE:
+        if tag_service.service_key == TRANSCODE_TAG_SERVICE:
             tag_service_correct = True
     # Check permissions
     # Check data folder
